@@ -1,0 +1,48 @@
+[project]
+name = "chatbot-RAG"
+version = "0.1.0"
+description = "AI assistent for HHrs"
+authors = [
+    {name = "bake.necko@gmail.com"}
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.9,<3.9.7 || >3.9.7,<4.0"
+dependencies = [
+    "pandas (>=2.2.3,<3.0.0)",
+    "transformers (>=4.50.3,<5.0.0)",
+    "torch (>=2.6.0,<3.0.0)",
+    "scikit-learn (>=1.6.1,<2.0.0)",
+    "sentencepiece (>=0.2.0,<0.3.0)",
+    "protobuf (<3.21.0)",
+    "accelerate @ git+https://github.com/huggingface/accelerate.git",
+    "datasets (>=3.5.0,<4.0.0)",
+    "loralib (>=0.1.2,<0.2.0)",
+    "einops (>=0.8.1,<0.9.0)",
+    "bitsandbytes (>=0.45.4,<0.46.0)",
+    "peft (==0.6.0)",
+    "langchain-community (>=0.3.20,<0.4.0)",
+    "faiss-cpu (>=1.10.0,<2.0.0)",
+    "langchain-openai (>=0.3.11,<0.4.0)",
+    "sentence-transformers (>=4.0.1,<5.0.0)",
+    "langchain-cohere (>=0.4.3,<0.5.0)",
+    "chromadb (>=0.6.3,<0.7.0)",
+    "ctransformers (>=0.2.27,<0.3.0)",
+    "llama-index (>=0.12.28,<0.13.0)",
+    "llama-index-llms-huggingface (>=0.4.2,<0.5.0)",
+    "pyprojroot (>=0.3.0,<0.4.0)",
+    "kaleido (==0.2.1)",
+    "vanna[chromadb,ollama] (>=0.7.6,<0.8.0)",
+    "langchain-huggingface (>=0.1.2,<0.2.0)",
+    "streamlit (>=1.44.1,<2.0.0)",
+    "streamlit-chat (>=0.1.1,<0.2.0)",
+    "langchain-ollama (>=0.3.0,<0.4.0)",
+    "langchain-core (>=0.3.50,<0.4.0)",
+    "deepseek (>=1.0.0,<2.0.0)",
+    "autopep8 (>=2.3.2,<3.0.0)",
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
