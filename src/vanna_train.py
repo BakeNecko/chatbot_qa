@@ -35,7 +35,7 @@ def get_vanna():
     vn = MyVanna(config={'model': Config.SQL2Text_LLM,
                  'path': 'data/chromadb'})
     vn.connect_to_sqlite(Config.DB_PATH)
-    vn.remove_training_data('1-sql')
+
     df_ddl = vn.run_sql(
         "SELECT type, sql FROM sqlite_master WHERE sql is not null")
     for ddl in df_ddl['sql'].to_list():

@@ -29,11 +29,11 @@
     },
     {
         "question": "Какой средний срок выполнения проектов в зависимости от уровня опыта фрилансера?",
-        "sql": "SELECT experience_level, AVG(job_duration_days) AS avg_duration, COUNT(*) AS project_count FROM freelancer_earnings GROUP BY experience_level HAVING COUNT(*) > 0 ORDER BY avg_duration ASC;"
+        "sql": "SELECT experience_level, AVG(job_duration_days) AS avg_duration_days, COUNT(*) AS project_count FROM freelancer_earnings GROUP BY experience_level HAVING COUNT(*) > 0 ORDER BY avg_duration ASC;"
     },
     {
         "question": "На каких платформах фрилансеры чаще всего тратят деньги на маркетинг и как это влияет на их доход?",
-        "sql": "SELECT platform, AVG(marketing_spend) AS avg_marketing_spend, AVG(earnings_usd) AS avg_income FROM freelancer_earnings GROUP BY platform HAVING AVG(marketing_spend) IS NOT NULL ORDER BY avg_marketing_spend DESC LIMIT 5;"
+        "sql": "SELECT platform, AVG(marketing_spend) AS avg_marketing_spend_usd, AVG(earnings_usd) AS avg_income FROM freelancer_earnings GROUP BY platform HAVING AVG(marketing_spend) IS NOT NULL ORDER BY avg_marketing_spend_usd DESC LIMIT 5;"
     },
     {
         "question": "Какой уровень дохода у фрилансеров по типам проектов и регионам клиентов?",
@@ -131,10 +131,38 @@
         "question": "Какой уровень успешности проектов у фрилансеров по регионам клиентов на платформе Upwork?",
         "sql": "SELECT client_region, AVG(job_success_rate) AS avg_success_rate FROM freelancer_earnings WHERE platform = 'Upwork' GROUP BY client_region HAVING COUNT(*) > 0 ORDER BY avg_success_rate DESC;"
     },
-    {
-        "question": "Какой средний срок выполнения проектов у фрилансеров с различными уровнями опыта на платформе Fiverr?",
-        "sql": "SELECT experience_level, AVG(job_duration_days) AS avg_duration FROM freelancer_earnings WHERE platform = 'Fiverr' GROUP BY experience_level HAVING COUNT(*) > 0 ORDER BY avg_duration ASC;"
-    },
+        {
+            "question": "Каковы средние доходы фрилансеров по категориям работы и регионам клиентов?",
+            "sql": "SELECT job_category, client_region, AVG(earnings_usd) AS average_earnings FROM freelancer_earnings GROUP BY job_category, client_region;"
+        },
+        {
+            "question": "Какой средний уровень успеха проектов фрилансеров в зависимости от платформы и уровня опыта?",
+            "sql": "SELECT platform, experience_level, AVG(job_success_rate) AS average_success_rate FROM freelancer_earnings GROUP BY platform, experience_level;"
+        },
+        {
+            "question": "Какова средняя почасовая ставка фрилансеров по типам проектов и регионам клиентов?",
+            "sql": "SELECT project_type, client_region, AVG(hourly_rate) AS average_hourly_rate FROM freelancer_earnings GROUP BY project_type, client_region;"
+        },
+        {
+            "question": "Как много завершенных проектов имеют фрилансеры в зависимости от уровня опыта и метода оплаты?",
+            "sql": "SELECT experience_level, payment_method, SUM(job_completed) AS total_jobs_completed FROM freelancer_earnings GROUP BY experience_level, payment_method;"
+        },
+        {
+            "question": "Каковы средние оценки клиентов для фрилансеров по уровням успеха и категориям работы?",
+            "sql": "SELECT job_success_rate, job_category, AVG(client_rating) AS average_client_rating FROM freelancer_earnings GROUP BY job_success_rate, job_category;"
+        },
+        {
+            "question": "Какова средняя сумма расходов на маркетинг для фрилансеров по платформам и уровням квалификации?",
+            "sql": "SELECT platform, experience_level, AVG(marketing_spend) AS average_marketing_spend FROM freelancer_earnings GROUP BY platform, experience_level;"
+        },
+        {
+            "question": "Каковы общие доходы фрилансеров по типам проектов и уровням успеха?",
+            "sql": "SELECT project_type, job_success_rate, SUM(earnings_usd) AS total_earnings FROM freelancer_earnings GROUP BY project_type, job_success_rate;"
+        },
+        {
+            "question": "Какой процент фрилансеров получает повторные заказы в зависимости от уровня квалификации и платформы?",
+            "sql": "SELECT rehire_rate, experience_level, COUNT(*) AS number_of_freelancers FROM freelancer_earnings GROUP BY rehire_rate, experience_level;"
+        },
     {
         "question": "На каких платформах фрилансеры имеют наибольший уровень повторных заказов?",
         "sql": "SELECT platform, AVG(rehire_rate) AS avg_rehire_rate FROM freelancer_earnings GROUP BY platform HAVING COUNT(*) > 0 ORDER BY avg_rehire_rate DESC LIMIT 5;"
@@ -233,7 +261,7 @@
     },
     {
         "question": "Какой уровень маркетинговых затрат у фрилансеров соотносится с их доходами по категориям работ?",
-        "sql": "SELECT job_category, AVG(marketing_spend) AS avg_marketing_spend, AVG(earnings_usd) AS avg_income FROM freelancer_earnings GROUP BY job_category HAVING COUNT(*) > 0 ORDER BY avg_income DESC;"
+        "sql": "SELECT job_category, AVG(marketing_spend) AS avg_marketing_spend_usd, AVG(earnings_usd) AS avg_income FROM freelancer_earnings GROUP BY job_category HAVING COUNT(*) > 0 ORDER BY avg_income DESC;"
     },
     {
         "question": "Какой средний успех проектов у фрилансеров зависит от уровня опыта и методов оплаты?",
@@ -253,7 +281,7 @@
     },
     {
         "question": "Как различаются временные затраты на проекты у фрилансеров с разным опытом и типами проектов? Как ты считаешь, что на это влияет?",
-        "sql": "SELECT experience_level, project_type, AVG(job_duration_days) AS avg_duration, COUNT(*) AS total_projects FROM freelancer_earnings GROUP BY experience_level, project_type HAVING COUNT(*) > 0 ORDER BY avg_duration ASC;"
+        "sql": "SELECT experience_level, project_type, AVG(job_duration_days) AS avg_duration_days, COUNT(*) AS total_projects FROM freelancer_earnings GROUP BY experience_level, project_type HAVING COUNT(*) > 0 ORDER BY avg_duration ASC;"
     },
     {
         "question": "Какой уровень повторных заказов наблюдается у фрилансеров в зависимости от их региона и категории работы? Почему ты думаешь так?",
@@ -273,7 +301,7 @@
     },
     {
         "question": "Какой уровень маркетинговых затрат у фрилансеров соотносится с их доходами по категориям работ? Как ты думаешь почему это так?",
-        "sql": "SELECT job_category, AVG(marketing_spend) AS avg_marketing_spend, AVG(earnings_usd) AS avg_income FROM freelancer_earnings GROUP BY job_category HAVING COUNT(*) > 0 ORDER BY avg_income DESC;"
+        "sql": "SELECT job_category, AVG(marketing_spend) AS avg_marketing_spend_usd, AVG(earnings_usd) AS avg_income FROM freelancer_earnings GROUP BY job_category HAVING COUNT(*) > 0 ORDER BY avg_income DESC;"
     },
     {
         "question": "Какой средний успех проектов у фрилансеров зависит от уровня опыта и методов оплаты? Почему ты считаешь это важным для выбора платформы?",
@@ -293,7 +321,7 @@
     },
     {
         "question": "Как различаются временные затраты на проекты у фрилансеров с разным опытом и клиентскими рейтингами? Как ты думаешь, что на это влияет?",
-        "sql": "SELECT experience_level, client_rating, AVG(job_duration_days) AS avg_duration, COUNT(*) AS total_projects FROM freelancer_earnings GROUP BY experience_level, client_rating HAVING COUNT(*) > 0 ORDER BY avg_duration ASC;"
+        "sql": "SELECT experience_level, client_rating, AVG(job_duration_days) AS avg_duration_days, COUNT(*) AS total_projects FROM freelancer_earnings GROUP BY experience_level, client_rating HAVING COUNT(*) > 0 ORDER BY avg_duration ASC;"
     },
     {
         "question": "Какой уровень повторных заказов наблюдается у фрилансеров в зависимости от их опыта и типа проекта? Почему ты считаешь это значимым?",
@@ -305,7 +333,7 @@
     },
     {
         "question": "Какой уровень маркетинговых затрат у фрилансеров соотносится с их успешностью по категориям работ? Почему ты считаешь это важным для бизнеса?",
-        "sql": "SELECT job_category, AVG(marketing_spend) AS avg_marketing_spend, AVG(job_success_rate) AS avg_success_rate FROM freelancer_earnings GROUP BY job_category HAVING COUNT(*) > 0 ORDER BY avg_success_rate DESC;"
+        "sql": "SELECT job_category, AVG(marketing_spend) AS , AVG(job_success_rate) AS avg_success_rate FROM freelancer_earnings GROUP BY job_category HAVING COUNT(*) > 0 ORDER BY avg_success_rate DESC;"
     },
     {
         "question": "Как различаются почасовые ставки фрилансеров по уровням опыта и регионам клиентов? Как ты полагаешь, почему это так?",
@@ -321,7 +349,7 @@
     },
     {
         "question": "Какой опыт работы в веб-разработке наиболее ценен для фрилансеров, работающих на платформах типа Upwork и Fiverr? Как ты считаешь, почему?",
-        "sql": "SELECT experience_level, COUNT(*) AS freelancer_count, AVG(earnings_usd) AS avg_earnings FROM freelancer_earnings WHERE job_category = 'Web Development' AND platform IN ('Upwork', 'Fiverr') GROUP BY experience_level HAVING COUNT(*) > 0 ORDER BY avg_earnings DESC;"
+        "sql": "SELECT experience_level, COUNT(*) AS freelancer_count, AVG(earnings_usd) AS avg_earnings_usd FROM freelancer_earnings WHERE job_category = 'Web Development' AND platform IN ('Upwork', 'Fiverr') GROUP BY experience_level HAVING COUNT(*) > 0 ORDER BY avg_earnings_usd DESC;"
     },
     {
         "question": "Какой уровень успеха проектов у фрилансеров в области цифрового маркетинга по сравнению с другими категориями? Что ты думаешь об этом?",
@@ -329,7 +357,7 @@
     },
     {
         "question": "Какой средний доход фрилансеров в графическом дизайне по регионам клиентов? Как ты полагаешь, почему так происходит?",
-        "sql": "SELECT client_region, AVG(earnings_usd) AS avg_earnings FROM freelancer_earnings WHERE job_category = 'Graphic Design' GROUP BY client_region HAVING COUNT(*) > 0 ORDER BY avg_earnings DESC;"
+        "sql": "SELECT client_region, AVG(earnings_usd) AS avg_earnings_usd FROM freelancer_earnings WHERE job_category = 'Graphic Design' GROUP BY client_region HAVING COUNT(*) > 0 ORDER BY avg_earnings_usd DESC;"
     },
     {
         "question": "Какой тип проектов (фиксированные или почасовые) более успешен среди фрилансеров в области SEO? Почему это может быть так?",
@@ -337,7 +365,7 @@
     },
     {
         "question": "Какой метод оплаты предпочитают фрилансеры в области поддержки клиентов и как это влияет на их доходы? Как ты думаешь, почему?",
-        "sql": "SELECT payment_method, AVG(earnings_usd) AS avg_earnings FROM freelancer_earnings WHERE job_category = 'Customer Support' GROUP BY payment_method HAVING COUNT(*) > 0 ORDER BY avg_earnings DESC;"
+        "sql": "SELECT payment_method, AVG(earnings_usd) AS avg_earnings_usd FROM freelancer_earnings WHERE job_category = 'Customer Support' GROUP BY payment_method HAVING COUNT(*) > 0 ORDER BY avg_earnings_usd DESC;"
     },
     {
         "question": "Какова средняя продолжительность проектов для фрилансеров в области контентного написания по сравнению с другими категориями? Что ты об этом думаешь?",
@@ -353,7 +381,7 @@
     },
     {
         "question": "Какой уровень клиентского рейтинга у фрилансеров в области разработки приложений и как он соотносится с их доходами? Как ты думаешь, почему это так?",
-        "sql": "SELECT client_rating, AVG(earnings_usd) AS avg_earnings FROM freelancer_earnings WHERE job_category = 'App Development' GROUP BY client_rating HAVING COUNT(*) > 0 ORDER BY client_rating DESC;"
+        "sql": "SELECT client_rating, AVG(earnings_usd) AS avg_earnings_usd FROM freelancer_earnings WHERE job_category = 'App Development' GROUP BY client_rating HAVING COUNT(*) > 0 ORDER BY client_rating DESC;"
     },
     {
         "question": "Какое влияние маркетинговые расходы оказывают на успех проектов фрилансеров в области цифрового маркетинга? Что ты об этом думаешь?",
@@ -361,7 +389,7 @@
     },
     {
         "question": "Какой уровень опыта наиболее распространен среди фрилансеров в области контентного написания и как это влияет на их доходы? Как ты думаешь, почему?",
-        "sql": "SELECT experience_level, COUNT(*) AS freelancer_count, AVG(earnings_usd) AS avg_earnings FROM freelancer_earnings WHERE job_category = 'Content Writing' GROUP BY experience_level HAVING COUNT(*) > 0 ORDER BY avg_earnings DESC;"
+        "sql": "SELECT experience_level, COUNT(*) AS freelancer_count, AVG(earnings_usd) AS avg_earnings_usd FROM freelancer_earnings WHERE job_category = 'Content Writing' GROUP BY experience_level HAVING COUNT(*) > 0 ORDER BY avg_earnings_usd DESC;"
     },
     {
         "question": "Какой тип проектов (фиксированные или почасовые) предпочитают фрилансеры в области графического дизайна и как это отражается на их успехе? Что ты об этом думаешь?",
@@ -369,7 +397,7 @@
     },
     {
         "question": "Какой средний доход фрилансеров в области SEO по регионам клиентов? Как ты считаешь, почему это так?",
-        "sql": "SELECT client_region, AVG(earnings_usd) AS avg_earnings FROM freelancer_earnings WHERE job_category = 'SEO' GROUP BY client_region HAVING COUNT(*) > 0 ORDER BY avg_earnings DESC;"
+        "sql": "SELECT client_region, AVG(earnings_usd) AS avg_earnings_usd FROM freelancer_earnings WHERE job_category = 'SEO' GROUP BY client_region HAVING COUNT(*) > 0 ORDER BY avg_earnings_usd DESC;"
     },
     {
         "question": "Какой уровень клиентского рейтинга у фрилансеров в области разработки приложений и как он соотносится с их успехом? Почему это может быть важно?",
@@ -377,7 +405,7 @@
     },
     {
         "question": "Какой метод оплаты наиболее популярен среди фрилансеров в области цифрового маркетинга и как это влияет на их доходы? Как ты полагаешь, почему?",
-        "sql": "SELECT payment_method, COUNT(*) AS payment_count, AVG(earnings_usd) AS avg_earnings FROM freelancer_earnings WHERE job_category = 'Digital Marketing' GROUP BY payment_method HAVING COUNT(*) > 0 ORDER BY avg_earnings DESC;"
+        "sql": "SELECT payment_method, COUNT(*) AS payment_count, AVG(earnings_usd) AS avg_earnings_usd FROM freelancer_earnings WHERE job_category = 'Digital Marketing' GROUP BY payment_method HAVING COUNT(*) > 0 ORDER BY avg_earnings_usd DESC;"
     },
     {
         "question": "Какова средняя продолжительность проектов для фрилансеров в области поддержки клиентов по сравнению с другими категориями? Что ты об этом думаешь?",
@@ -401,7 +429,7 @@
     },
     {
         "question": "Какой средний доход фрилансеров в области веб-разработки по сравнению с другими категориями? Почему это может быть интересно?",
-        "sql": "SELECT job_category, AVG(earnings_usd) AS avg_earnings FROM freelancer_earnings WHERE job_category IN ('Web Development', 'App Development', 'Data Entry', 'Digital Marketing', 'Customer Support', 'Content Writing', 'Graphic Design', 'SEO') GROUP BY job_category HAVING COUNT(*) > 0 ORDER BY avg_earnings DESC;"
+        "sql": "SELECT job_category, AVG(earnings_usd) AS avg_earnings_usd FROM freelancer_earnings WHERE job_category IN ('Web Development', 'App Development', 'Data Entry', 'Digital Marketing', 'Customer Support', 'Content Writing', 'Graphic Design', 'SEO') GROUP BY job_category HAVING COUNT(*) > 0 ORDER BY avg_earnings_usd DESC;"
     },
     {
         "question": "Какой уровень успеха проектов у фрилансеров в области цифрового маркетинга? Как ты думаешь, что на это влияет?",
@@ -409,7 +437,7 @@
     },
     {
         "question": "Какой метод оплаты наиболее распространен среди фрилансеров в области графического дизайна и как это влияет на их доходы?",
-        "sql": "SELECT payment_method, COUNT(*) AS payment_count, AVG(earnings_usd) AS avg_earnings FROM freelancer_earnings WHERE job_category = 'Graphic Design' GROUP BY payment_method HAVING COUNT(*) > 0 ORDER BY avg_earnings DESC;"
+        "sql": "SELECT payment_method, COUNT(*) AS payment_count, AVG(earnings_usd) AS avg_earnings_usd FROM freelancer_earnings WHERE job_category = 'Graphic Design' GROUP BY payment_method HAVING COUNT(*) > 0 ORDER BY avg_earnings_usd DESC;"
     },
     {
         "question": "Какова средняя продолжительность проектов для фрилансеров в области поддержки клиентов? Почему это может быть важно?",
@@ -429,7 +457,7 @@
     },
     {
         "question": "Каковы различия в доходах между фрилансерами из разных регионов клиентов? Как ты считаешь, почему это так?",
-        "sql": "SELECT client_region, AVG(earnings_usd) AS avg_earnings FROM freelancer_earnings GROUP BY client_region HAVING COUNT(*) > 0 ORDER BY avg_earnings DESC;"
+        "sql": "SELECT client_region, AVG(earnings_usd) AS avg_earnings_usd FROM freelancer_earnings GROUP BY client_region HAVING COUNT(*) > 0 ORDER BY avg_earnings_usd DESC;"
     },
     {
         "question": "Какой тип проектов (фиксированные или почасовые) предпочитают фрилансеры в области цифрового маркетинга и как это отражается на их успехе?",
@@ -441,7 +469,7 @@
     },
     {
         "question": "Какой средний доход фрилансеров в веб-разработке?",
-        "sql": "SELECT job_category, AVG(earnings_usd) AS avg_earnings FROM freelancer_earnings WHERE job_category = 'Web Development' GROUP BY job_category;"
+        "sql": "SELECT job_category, AVG(earnings_usd) AS avg_earnings_usd FROM freelancer_earnings WHERE job_category = 'Web Development' GROUP BY job_category;"
     },
     {
         "question": "Какой уровень успеха у фрилансеров в цифровом маркетинге?",
@@ -469,7 +497,7 @@
     },
     {
         "question": "Каковы доходы фрилансеров из разных регионов?",
-        "sql": "SELECT client_region, AVG(earnings_usd) AS avg_earnings FROM freelancer_earnings GROUP BY client_region ORDER BY avg_earnings DESC;"
+        "sql": "SELECT client_region, AVG(earnings_usd) AS avg_earnings_usd FROM freelancer_earnings GROUP BY client_region ORDER BY avg_earnings_usd DESC;"
     },
     {
         "question": "Какой тип проектов предпочитают фрилансеры в цифровом маркетинге?",
@@ -481,7 +509,7 @@
     },
     {
         "question": "Какой средний доход фрилансеров в контентном написании?",
-        "sql": "SELECT AVG(earnings_usd) AS avg_earnings FROM freelancer_earnings WHERE job_category = 'Content Writing' AND job_category IN (SELECT DISTINCT job_category FROM freelancer_earnings WHERE job_category IS NOT NULL);"
+        "sql": "SELECT AVG(earnings_usd) AS avg_earnings_usd FROM freelancer_earnings WHERE job_category = 'Content Writing' AND job_category IN (SELECT DISTINCT job_category FROM freelancer_earnings WHERE job_category IS NOT NULL);"
     },
     {
         "question": "Какой уровень успеха у фрилансеров в графическом дизайне?",
@@ -509,7 +537,7 @@
     },
     {
         "question": "Каковы доходы фрилансеров из США по сравнению с другими регионами?",
-        "sql": "SELECT client_region, AVG(earnings_usd) AS avg_earnings FROM freelancer_earnings WHERE client_region IN (SELECT DISTINCT client_region FROM freelancer_earnings WHERE client_region IS NOT NULL) GROUP BY client_region ORDER BY avg_earnings DESC;"
+        "sql": "SELECT client_region, AVG(earnings_usd) AS avg_earnings_usd FROM freelancer_earnings WHERE client_region IN (SELECT DISTINCT client_region FROM freelancer_earnings WHERE client_region IS NOT NULL) GROUP BY client_region ORDER BY avg_earnings_usd DESC;"
     },
     {
         "question": "Какой тип проектов предпочитают фрилансеры в разработке приложений?",
@@ -517,11 +545,11 @@
     },
     {
         "question": "Как маркетинговые расходы влияют на доходы фрилансеров в контентном написании?",
-        "sql": "SELECT marketing_spend, AVG(earnings_usd) AS avg_earnings FROM freelancer_earnings WHERE job_category = 'Content Writing' AND marketing_spend IS NOT NULL GROUP BY marketing_spend;"
+        "sql": "SELECT marketing_spend, AVG(earnings_usd) AS avg_earnings_usd FROM freelancer_earnings WHERE job_category = 'Content Writing' AND marketing_spend IS NOT NULL GROUP BY marketing_spend;"
     },
     {
         "question": "Какой средний доход фрилансеров в веб-разработке по регионам?",
-        "sql": "SELECT client_region, AVG(earnings_usd) AS avg_earnings, COUNT(*) AS freelancer_count FROM freelancer_earnings WHERE job_category = 'Web Development' GROUP BY client_region ORDER BY avg_earnings DESC LIMIT 5;"
+        "sql": "SELECT client_region, AVG(earnings_usd) AS avg_earnings_usd, COUNT(*) AS freelancer_count FROM freelancer_earnings WHERE job_category = 'Web Development' GROUP BY client_region ORDER BY avg_earnings_usd DESC LIMIT 5;"
     },
     {
         "question": "Какой уровень успеха у фрилансеров в графическом дизайне по платформам?",
@@ -529,7 +557,7 @@
     },
     {
         "question": "Какой тип проектов предпочитают фрилансеры в цифровом маркетинге?",
-        "sql": "SELECT project_type, COUNT(*) AS project_count, AVG(earnings_usd) AS avg_earnings FROM freelancer_earnings WHERE job_category = 'Digital Marketing' GROUP BY project_type ORDER BY project_count DESC;"
+        "sql": "SELECT project_type, COUNT(*) AS project_count, AVG(earnings_usd) AS avg_earnings_usd FROM freelancer_earnings WHERE job_category = 'Digital Marketing' GROUP BY project_type ORDER BY project_count DESC;"
     },
     {
         "question": "Какой средний почасовой тариф у фрилансеров в поддержке клиентов по уровням опыта?",
@@ -537,7 +565,7 @@
     },
     {
         "question": "Какова средняя продолжительность проектов в контентном написании по методам оплаты?",
-        "sql": "SELECT payment_method, AVG(job_duration_days) AS avg_duration, COUNT(*) AS project_count FROM freelancer_earnings WHERE job_category = 'Content Writing' GROUP BY payment_method HAVING COUNT(*) > 3 ORDER BY avg_duration ASC;"
+        "sql": "SELECT payment_method, AVG(job_duration_days) AS avg_duration_days, COUNT(*) AS project_count FROM freelancer_earnings WHERE job_category = 'Content Writing' GROUP BY payment_method HAVING COUNT(*) > 3 ORDER BY avg_duration ASC;"
     },
     {
         "question": "Какой клиентский рейтинг у фрилансеров в SEO по регионам?",
@@ -549,11 +577,11 @@
     },
     {
         "question": "Каковы доходы фрилансеров из США по сравнению с другими регионами в веб-разработке?",
-        "sql": "SELECT client_region, AVG(earnings_usd) AS avg_earnings FROM freelancer_earnings WHERE job_category = 'Web Development' AND client_region IN (SELECT DISTINCT client_region FROM freelancer_earnings WHERE client_region IS NOT NULL) GROUP BY client_region ORDER BY avg_earnings DESC;"
+        "sql": "SELECT client_region, AVG(earnings_usd) AS avg_earnings_usd FROM freelancer_earnings WHERE job_category = 'Web Development' AND client_region IN (SELECT DISTINCT client_region FROM freelancer_earnings WHERE client_region IS NOT NULL) GROUP BY client_region ORDER BY avg_earnings_usd DESC;"
     },
     {
         "question": "Как маркетинговые расходы влияют на доходы фрилансеров в графическом дизайне?",
-        "sql": "SELECT marketing_spend, AVG(earnings_usd) AS avg_earnings, COUNT(*) AS project_count FROM freelancer_earnings WHERE job_category = 'Graphic Design' AND marketing_spend IS NOT NULL GROUP BY marketing_spend ORDER BY avg_earnings DESC;"
+        "sql": "SELECT marketing_spend, AVG(earnings_usd) AS avg_earnings_usd, COUNT(*) AS project_count FROM freelancer_earnings WHERE job_category = 'Graphic Design' AND marketing_spend IS NOT NULL GROUP BY marketing_spend ORDER BY avg_earnings_usd DESC;"
     },
     {
         "question": "Какой уровень успеха у фрилансеров в данных вводах по уровням опыта?",
@@ -754,5 +782,481 @@
     {
         "question": "Какова средняя реальная ставка повторного найма среди всех фрилансеров?",
         "sql": "SELECT AVG(rehire_rate) AS average_rehire_rate FROM freelancer_earnings;"
+    },
+    {
+        "question": "Каковы общие доходы фрилансеров по категориям работ?",
+        "sql": "SELECT job_category, SUM(earnings_usd) AS total_earnings FROM freelancer_earnings GROUP BY job_category;"
+    },
+    {
+        "question": "Какой средний доход фрилансеров по платформам?",
+        "sql": "SELECT platform, AVG(hourly_rate) AS average_hourly_rate FROM freelancer_earnings GROUP BY platform;"
+    },
+    {
+        "question": "Какой процент успешных проектов у фрилансеров с разным уровнем опыта?",
+        "sql": "SELECT experience_level, AVG(job_success_rate) AS average_success_rate FROM freelancer_earnings GROUP BY experience_level;"
+    },
+    {
+        "question": "Сколько проектов было завершено фрилансерами из разных регионов?",
+        "sql": "SELECT client_region, SUM(job_completed) AS total_jobs_completed FROM freelancer_earnings GROUP BY client_region;"
+    },
+    {
+        "question": "Каковы средние оценки клиентов для фрилансеров по типам проектов?",
+        "sql": "SELECT project_type, AVG(client_rating) AS average_client_rating FROM freelancer_earnings GROUP BY project_type;"
+    },
+    {
+        "question": "Каковы общие расходы на маркетинг фрилансеров по уровням опыта?",
+        "sql": "SELECT experience_level, SUM(marketing_spend) AS total_marketing_spend FROM freelancer_earnings GROUP BY experience_level;"
+    },
+    {
+        "question": "Каков средний срок выполнения проектов для разных категорий работ?",
+        "sql": "SELECT job_category, AVG(job_duration_days) AS average_duration FROM freelancer_earnings GROUP BY job_category;"
+    },
+    {
+        "question": "Какова общая сумма доходов фрилансеров по платформам и уровням опыта?",
+        "sql": "SELECT platform, experience_level, SUM(earnings_usd) AS total_earnings FROM freelancer_earnings GROUP BY platform, experience_level;"
+    },
+    {
+        "question": "Каковы общие доходы фрилансеров по различным платформам?",
+        "sql": "SELECT platform, SUM(earnings_usd) AS total_earnings FROM freelancer_earnings GROUP BY platform;"
+    },
+    {
+        "question": "Какой средний уровень успеха проектов у фрилансеров по регионам клиентов?",
+        "sql": "SELECT client_region, AVG(job_success_rate) AS average_success_rate FROM freelancer_earnings GROUP BY client_region;"
+    },
+    {
+        "question": "Какова средняя почасовая ставка фрилансеров в зависимости от уровня опыта?",
+        "sql": "SELECT experience_level, AVG(hourly_rate) AS average_hourly_rate FROM freelancer_earnings GROUP BY experience_level;"
+    },
+    {
+        "question": "Сколько проектов было завершено фрилансерами в каждой категории работы?",
+        "sql": "SELECT job_category, SUM(job_completed) AS total_jobs_completed FROM freelancer_earnings GROUP BY job_category;"
+    },
+    {
+        "question": "Каковы средние расходы на маркетинг для фрилансеров с разными уровнями успеха?",
+        "sql": "SELECT job_success_rate, AVG(marketing_spend) AS average_marketing_spend FROM freelancer_earnings GROUP BY job_success_rate;"
+    },
+    {
+        "question": "Какой процент фрилансеров получает повторные заказы от клиентов?",
+        "sql": "SELECT rehire_rate, COUNT(*) AS number_of_freelancers FROM freelancer_earnings GROUP BY rehire_rate;"
+    },
+    {
+        "question": "Какова общая сумма доходов фрилансеров по типам проектов и уровням опыта?",
+        "sql": "SELECT project_type, experience_level, SUM(earnings_usd) AS total_earnings FROM freelancer_earnings GROUP BY project_type, experience_level;"
+    },
+    {
+        "question": "Каковы средние оценки клиентов для фрилансеров по различным платформам?",
+        "sql": "SELECT platform, AVG(client_rating) AS average_client_rating FROM freelancer_earnings GROUP BY platform;"
+    },
+    {
+        "question": "Каковы общие финансовые поступления фрилансеров по различным платформам?",
+        "sql": "SELECT platform, SUM(earnings_usd) AS total_earnings FROM freelancer_earnings GROUP BY platform;"
+    },
+    {
+        "question": "Какой средний коэффициент успешности проектов у фрилансеров по регионам клиентов?",
+        "sql": "SELECT client_region, AVG(job_success_rate) AS average_success_rate FROM freelancer_earnings GROUP BY client_region;"
+    },
+    {
+        "question": "Какова средняя ставка за час работы фрилансеров в зависимости от уровня квалификации?",
+        "sql": "SELECT experience_level, AVG(hourly_rate) AS average_hourly_rate FROM freelancer_earnings GROUP BY experience_level;"
+    },
+    {
+        "question": "Сколько завершенных проектов имеют фрилансеры в каждой категории деятельности?",
+        "sql": "SELECT job_category, SUM(job_completed) AS total_jobs_completed FROM freelancer_earnings GROUP BY job_category;"
+    },
+    {
+        "question": "Каковы средние затраты на продвижение для фрилансеров с различными уровнями успеха?",
+        "sql": "SELECT job_success_rate, AVG(marketing_spend) AS average_marketing_spend FROM freelancer_earnings GROUP BY job_success_rate;"
+    },
+    {
+        "question": "Какой процент фрилансеров получает повторные контракты от клиентов?",
+        "sql": "SELECT rehire_rate, COUNT(*) AS number_of_freelancers FROM freelancer_earnings GROUP BY rehire_rate;"
+    },
+    {
+        "question": "Какова общая сумма доходов фрилансеров по видам проектов и уровням квалификации?",
+        "sql": "SELECT project_type, experience_level, SUM(earnings_usd) AS total_earnings FROM freelancer_earnings GROUP BY project_type, experience_level;"
+    },
+    {
+        "question": "Каковы средние оценки от клиентов для фрилансеров по различным платформам?",
+        "sql": "SELECT platform, AVG(client_rating) AS average_client_rating FROM freelancer_earnings GROUP BY platform;"
+    },
+    {
+        "question": "Каковы общие доходы фрилансеров по различным платформам?",
+        "sql": "SELECT platform, SUM(earnings_usd) AS total_earnings FROM freelancer_earnings GROUP BY platform;"
+    },
+    {
+        "question": "Какой средний уровень успешности проектов у фрилансеров по регионам клиентов?",
+        "sql": "SELECT client_region, AVG(job_success_rate) AS average_success_rate FROM freelancer_earnings GROUP BY client_region;"
+    },
+    {
+        "question": "Какова средняя почасовая ставка фрилансеров в зависимости от уровня квалификации?",
+        "sql": "SELECT experience_level, AVG(hourly_rate) AS average_hourly_rate FROM freelancer_earnings GROUP BY experience_level;"
+    },
+    {
+        "question": "Сколько завершенных проектов имеют фрилансеры в каждой категории работы?",
+        "sql": "SELECT job_category, SUM(job_completed) AS total_jobs_completed FROM freelancer_earnings GROUP BY job_category;"
+    },
+    {
+        "question": "Каковы средние расходы на рекламу для фрилансеров с различными уровнями успеха?",
+        "sql": "SELECT job_success_rate, AVG(marketing_spend) AS average_marketing_spend FROM freelancer_earnings GROUP BY job_success_rate;"
+    },
+    {
+        "question": "Какой процент фрилансеров получает повторные заказы от клиентов?",
+        "sql": "SELECT rehire_rate, COUNT(*) AS number_of_freelancers FROM freelancer_earnings GROUP BY rehire_rate;"
+    },
+    {
+        "question": "Какова общая сумма доходов фрилансеров по типам проектов и уровням квалификации?",
+        "sql": "SELECT project_type, experience_level, SUM(earnings_usd) AS total_earnings FROM freelancer_earnings GROUP BY project_type, experience_level;"
+    },
+    {
+        "question": "Каковы средние оценки клиентов для фрилансеров по различным платформам?",
+        "sql": "SELECT platform, AVG(client_rating) AS average_client_rating FROM freelancer_earnings GROUP BY platform;"
+    },
+    {
+        "question": "Каковы финансовые результаты фрилансеров по различным платформам?",
+        "sql": "SELECT platform, SUM(earnings_usd) AS total_earnings FROM freelancer_earnings GROUP BY platform;"
+    },
+    {
+        "question": "Какой средний успех проектов фрилансеров в зависимости от региона клиентов?",
+        "sql": "SELECT client_region, AVG(job_success_rate) AS average_success_rate FROM freelancer_earnings GROUP BY client_region;"
+    },
+    {
+        "question": "Какова средняя стоимость услуг фрилансеров в зависимости от их опыта?",
+        "sql": "SELECT experience_level, AVG(hourly_rate) AS average_hourly_rate FROM freelancer_earnings GROUP BY experience_level;"
+    },
+    {
+        "question": "Сколько проектов было выполнено фрилансерами в разных областях работы?",
+        "sql": "SELECT job_category, SUM(job_completed) AS total_jobs_completed FROM freelancer_earnings GROUP BY job_category;"
+    },
+    {
+        "question": "Каковы средние затраты на продвижение для фрилансеров с разными уровнями успеха?",
+        "sql": "SELECT job_success_rate, AVG(marketing_spend) AS average_marketing_spend FROM freelancer_earnings GROUP BY job_success_rate;"
+    },
+    {
+        "question": "Какой процент фрилансеров получает повторные контракты от клиентов?",
+        "sql": "SELECT rehire_rate, COUNT(*) AS number_of_freelancers FROM freelancer_earnings GROUP BY rehire_rate;"
+    },
+    {
+        "question": "Какова общая сумма доходов фрилансеров по различным типам проектов и уровням опыта?",
+        "sql": "SELECT project_type, experience_level, SUM(earnings_usd) AS total_earnings FROM freelancer_earnings GROUP BY project_type, experience_level;"
+    },
+    {
+        "question": "Каковы средние оценки клиентов для фрилансеров на разных платформах?",
+        "sql": "SELECT platform, AVG(client_rating) AS average_client_rating FROM freelancer_earnings GROUP BY platform;"
+    },
+    {
+        "question": "Каковы финансовые результаты фрилансеров по различным платформам и уровням опыта?",
+        "sql": "SELECT platform, experience_level, SUM(earnings_usd) AS total_earnings FROM freelancer_earnings GROUP BY platform, experience_level;"
+    },
+    {
+        "question": "Какой средний успех проектов фрилансеров в зависимости от региона клиентов и типа работы?",
+        "sql": "SELECT client_region, job_category, AVG(job_success_rate) AS average_success_rate FROM freelancer_earnings GROUP BY client_region, job_category;"
+    },
+    {
+        "question": "Какова средняя стоимость услуг фрилансеров по уровням опыта и категориям проектов?",
+        "sql": "SELECT experience_level, project_type, AVG(hourly_rate) AS average_hourly_rate FROM freelancer_earnings GROUP BY experience_level, project_type;"
+    },
+    {
+        "question": "Сколько проектов было выполнено фрилансерами в разных областях работы и по регионам клиентов?",
+        "sql": "SELECT job_category, client_region, SUM(job_completed) AS total_jobs_completed FROM freelancer_earnings GROUP BY job_category, client_region;"
+    },
+    {
+        "question": "Каковы средние затраты на продвижение для фрилансеров с разными уровнями успеха и типами проектов?",
+        "sql": "SELECT job_success_rate, project_type, AVG(marketing_spend) AS average_marketing_spend FROM freelancer_earnings GROUP BY job_success_rate, project_type;"
+    },
+    {
+        "question": "Какой процент фрилансеров получает повторные контракты от клиентов в зависимости от уровня опыта?",
+        "sql": "SELECT rehire_rate, experience_level, COUNT(*) AS number_of_freelancers FROM freelancer_earnings GROUP BY rehire_rate, experience_level;"
+    },
+    {
+        "question": "Какова общая сумма доходов фрилансеров по различным типам проектов и регионам клиентов?",
+        "sql": "SELECT project_type, client_region, SUM(earnings_usd) AS total_earnings FROM freelancer_earnings GROUP BY project_type, client_region;"
+    },
+    {
+        "question": "Каковы средние оценки клиентов для фрилансеров на разных платформах и уровнях квалификации?",
+        "sql": "SELECT platform, experience_level, AVG(client_rating) AS average_client_rating FROM freelancer_earnings GROUP BY platform, experience_level;"
+    },
+    {
+        "question": "Каковы общие доходы фрилансеров по категориям работы и регионам клиентов?",
+        "sql": "SELECT job_category, client_region, SUM(earnings_usd) AS total_earnings FROM freelancer_earnings GROUP BY job_category, client_region;"
+    },
+    {
+        "question": "Какой средний успех проектов фрилансеров в зависимости от платформы и уровня опыта?",
+        "sql": "SELECT platform, experience_level, AVG(job_success_rate) AS average_success_rate FROM freelancer_earnings GROUP BY platform, experience_level;"
+    },
+    {
+        "question": "Какова средняя почасовая ставка фрилансеров по типам проектов и регионам клиентов?",
+        "sql": "SELECT project_type, client_region, AVG(hourly_rate) AS average_hourly_rate FROM freelancer_earnings GROUP BY project_type, client_region;"
+    },
+    {
+        "question": "Сколько завершенных проектов имеют фрилансеры в зависимости от уровня опыта и метода оплаты?",
+        "sql": "SELECT experience_level, payment_method, SUM(job_completed) AS total_jobs_completed FROM freelancer_earnings GROUP BY experience_level, payment_method;"
+    },
+    {
+        "question": "Каковы средние расходы на маркетинг для фрилансеров с различными уровнями успеха и категориями работы?",
+        "sql": "SELECT job_success_rate, job_category, AVG(marketing_spend) AS average_marketing_spend FROM freelancer_earnings GROUP BY job_success_rate, job_category;"
+    },
+    {
+        "question": "Какой процент фрилансеров получает повторные заказы от клиентов в зависимости от платформы и региона клиентов?",
+        "sql": "SELECT rehire_rate, platform, COUNT(*) AS number_of_freelancers FROM freelancer_earnings GROUP BY rehire_rate, platform;"
+    },
+    {
+        "question": "Какова общая сумма доходов фрилансеров по типам проектов и уровням квалификации?",
+        "sql": "SELECT project_type, experience_level, SUM(earnings_usd) AS total_earnings FROM freelancer_earnings GROUP BY project_type, experience_level;"
+    },
+    {
+        "question": "Каковы средние оценки клиентов для фрилансеров по платформам и методам оплаты?",
+        "sql": "SELECT platform, payment_method, AVG(client_rating) AS average_client_rating FROM freelancer_earnings GROUP BY platform, payment_method;"
+    },
+    {
+        "question": "Какова средняя продолжительность проектов фрилансеров по категориям работы и уровням опыта?",
+        "sql": "SELECT job_category, experience_level, AVG(job_duration_days) AS average_duration FROM freelancer_earnings GROUP BY job_category, experience_level;"
+    },
+    {
+        "question": "Каковы общие доходы фрилансеров по регионам клиентов и методам оплаты?",
+        "sql": "SELECT client_region, payment_method, SUM(earnings_usd) AS total_earnings FROM freelancer_earnings GROUP BY client_region, payment_method;"
+    },
+    {
+        "question": "Какой средний уровень успеха проектов фрилансеров в зависимости от платформы и типа проекта?",
+        "sql": "SELECT platform, project_type, AVG(job_success_rate) AS average_success_rate FROM freelancer_earnings GROUP BY platform, project_type;"
+    },
+    {
+        "question": "Сколько проектов было завершено фрилансерами в зависимости от уровня квалификации и категории работы?",
+        "sql": "SELECT experience_level, job_category, SUM(job_completed) AS total_jobs_completed FROM freelancer_earnings GROUP BY experience_level, job_category;"
+    },
+    {
+        "question": "Каковы средние оценки клиентов для фрилансеров по уровням успеха и регионам клиентов?",
+        "sql": "SELECT job_success_rate, client_region, AVG(client_rating) AS average_client_rating FROM freelancer_earnings GROUP BY job_success_rate, client_region;"
+    },
+    {
+        "question": "Какова средняя сумма расходов на маркетинг для фрилансеров по платформам и уровням опыта?",
+        "sql": "SELECT platform, experience_level, AVG(marketing_spend) AS average_marketing_spend FROM freelancer_earnings GROUP BY platform, experience_level;"
+    },
+    {
+        "question": "Каковы общие доходы фрилансеров по типам проектов и регионам клиентов?",
+        "sql": "SELECT project_type, client_region, SUM(earnings_usd) AS total_earnings FROM freelancer_earnings GROUP BY project_type, client_region;"
+    },
+    {
+        "question": "Какой процент фрилансеров получает повторные контракты в зависимости от уровня квалификации и метода оплаты?",
+        "sql": "SELECT rehire_rate, experience_level, COUNT(*) AS number_of_freelancers FROM freelancer_earnings GROUP BY rehire_rate, experience_level;"
+    },
+    {
+        "question": "Какова средняя почасовая ставка фрилансеров по регионам клиентов и категориям работы?",
+        "sql": "SELECT client_region, job_category, AVG(hourly_rate) AS average_hourly_rate FROM freelancer_earnings GROUP BY client_region, job_category;"
+    },
+    {
+        "question": "Каковы общие доходы фрилансеров по уровням квалификации и платформам?",
+        "sql": "SELECT experience_level, platform, SUM(earnings_usd) AS total_earnings FROM freelancer_earnings GROUP BY experience_level, platform;"
+    },
+    {
+        "question": "Какой средний уровень успеха проектов фрилансеров в зависимости от категории работы и метода оплаты?",
+        "sql": "SELECT job_category, payment_method, AVG(job_success_rate) AS average_success_rate FROM freelancer_earnings GROUP BY job_category, payment_method;"
+    },
+    {
+        "question": "Сколько завершенных проектов имеют фрилансеры в зависимости от платформы и уровня успеха?",
+        "sql": "SELECT platform, job_success_rate, SUM(job_completed) AS total_jobs_completed FROM freelancer_earnings GROUP BY platform, job_success_rate;"
+    },
+    {
+        "question": "Каковы средние оценки клиентов для фрилансеров по типам проектов и регионам клиентов?",
+        "sql": "SELECT project_type, client_region, AVG(client_rating) AS average_client_rating FROM freelancer_earnings GROUP BY project_type, client_region;"
+    },
+    {
+        "question": "Какова средняя сумма расходов на маркетинг для фрилансеров по уровням квалификации и типам проектов?",
+        "sql": "SELECT experience_level, project_type, AVG(marketing_spend) AS average_marketing_spend FROM freelancer_earnings GROUP BY experience_level, project_type;"
+    },
+    {
+        "question": "Каковы общие доходы фрилансеров по уровням успеха и регионам клиентов?",
+        "sql": "SELECT job_success_rate, client_region, SUM(earnings_usd) AS total_earnings FROM freelancer_earnings GROUP BY job_success_rate, client_region;"
+    },
+    {
+        "question": "Какой процент фрилансеров получает повторные заказы в зависимости от платформы и категории работы?",
+        "sql": "SELECT rehire_rate, platform, COUNT(*) AS number_of_freelancers FROM freelancer_earnings GROUP BY rehire_rate, platform;"
+    },
+    {
+        "question": "Какова средняя продолжительность проектов фрилансеров по категориям работы и уровням квалификации?",
+        "sql": "SELECT job_category, experience_level, AVG(job_duration_days) AS average_duration FROM freelancer_earnings GROUP BY job_category, experience_level;"
+    },
+    {
+        "question": "Каковы общие доходы фрилансеров по регионам клиентов и методам оплаты?",
+        "sql": "SELECT client_region, payment_method, SUM(earnings_usd) AS total_earnings FROM freelancer_earnings GROUP BY client_region, payment_method;"
+    },
+    {
+        "question": "Какой средний уровень успеха проектов фрилансеров в зависимости от платформы и типа проекта?",
+        "sql": "SELECT platform, project_type, AVG(job_success_rate) AS average_success_rate FROM freelancer_earnings GROUP BY platform, project_type;"
+    },
+    {
+        "question": "Как много завершенных проектов имеют фрилансеры в зависимости от уровня квалификации и категории работы?",
+        "sql": "SELECT experience_level, job_category, SUM(job_completed) AS total_jobs_completed FROM freelancer_earnings GROUP BY experience_level, job_category;"
+    },
+    {
+        "question": "Каковы средние оценки клиентов для фрилансеров по уровням успеха и регионам клиентов?",
+        "sql": "SELECT job_success_rate, client_region, AVG(client_rating) AS average_client_rating FROM freelancer_earnings GROUP BY job_success_rate, client_region;"
+    },
+    {
+        "question": "Какова средняя сумма расходов на маркетинг для фрилансеров по платформам и уровням опыта?",
+        "sql": "SELECT platform, experience_level, AVG(marketing_spend) AS average_marketing_spend FROM freelancer_earnings GROUP BY platform, experience_level;"
+    },
+    {
+        "question": "Каковы общие доходы фрилансеров по типам проектов и регионам клиентов?",
+        "sql": "SELECT project_type, client_region, SUM(earnings_usd) AS total_earnings FROM freelancer_earnings GROUP BY project_type, client_region;"
+    },
+    {
+        "question": "Какой процент фрилансеров получает повторные контракты в зависимости от уровня квалификации и метода оплаты?",
+        "sql": "SELECT rehire_rate, experience_level, COUNT(*) AS number_of_freelancers FROM freelancer_earnings GROUP BY rehire_rate, experience_level;"
+    },
+    {
+        "question": "Какой тип проектов предпочитают фрилансеры для работы?",
+        "sql": "SELECT project_type, COUNT(*) AS count FROM freelancer_earnings GROUP BY project_type;"
+    },
+    {
+        "question": "Сколько времени в среднем фрилансеры тратят на завершение одного проекта?",
+        "sql": "SELECT AVG(job_duration_days) AS average_duration FROM freelancer_earnings;"
+    },
+    {
+        "question": "Каков средний доход фрилансеров в зависимости от уровня их квалификации?",
+        "sql": "SELECT experience_level, AVG(earnings_usd) AS average_income FROM freelancer_earnings GROUP BY experience_level;"
+    },
+    {
+        "question": "Как влияет опыт работы на почасовую ставку фрилансера?",
+        "sql": "SELECT experience_level, AVG(hourly_rate) AS average_hourly_rate FROM freelancer_earnings GROUP BY experience_level;"
+    },
+    {
+        "question": "Какой процент клиентов оставляет положительные отзывы о работе успешных фрилансеров?",
+        "sql": "SELECT job_success_rate, AVG(client_rating) AS average_client_rating FROM freelancer_earnings GROUP BY job_success_rate;"
+    },
+    {
+        "question": "Какова средняя продолжительность проектов у фрилансеров в графическом дизайне?",
+        "sql": "SELECT AVG(job_duration_days) AS average_duration FROM freelancer_earnings WHERE job_category = 'Graphic Design';"
+    },
+    {
+        "question": "Какой средний доход получают фрилансеры, работающие на разных платформах?",
+        "sql": "SELECT platform, AVG(earnings_usd) AS average_income FROM freelancer_earnings GROUP BY platform;"
+    },
+    {
+        "question": "Как часто фрилансеры получают повторные заказы от одних и тех же клиентов?",
+        "sql": "SELECT rehire_rate, COUNT(*) AS number_of_freelancers FROM freelancer_earnings GROUP BY rehire_rate;"
+    },
+    {
+        "question": "Какой уровень успеха проектов у фрилансеров с различными методами оплаты?",
+        "sql": "SELECT payment_method, AVG(job_success_rate) AS average_success_rate FROM freelancer_earnings GROUP BY payment_method;"
+    },
+    {
+        "question": "Какой тип проектов предпочитают фрилансеры для работы?",
+        "sql": "SELECT project_type, COUNT(*) AS count FROM freelancer_earnings GROUP BY project_type;"
+    },
+    {
+        "question": "Сколько времени в среднем фрилансеры тратят на завершение одного проекта?",
+        "sql": "SELECT AVG(job_duration_days) AS average_duration FROM freelancer_earnings;"
+    },
+    {
+        "question": "Каков средний доход фрилансеров в зависимости от уровня их квалификации?",
+        "sql": "SELECT experience_level, AVG(earnings_usd) AS average_income FROM freelancer_earnings GROUP BY experience_level;"
+    },
+    {
+        "question": "Как влияет опыт работы на почасовую ставку фрилансера?",
+        "sql": "SELECT experience_level, AVG(hourly_rate) AS average_hourly_rate FROM freelancer_earnings GROUP BY experience_level;"
+    },
+    {
+        "question": "Какой процент клиентов оставляет положительные отзывы о работе успешных фрилансеров?",
+        "sql": "SELECT job_success_rate, AVG(client_rating) AS average_client_rating FROM freelancer_earnings WHERE job_success_rate >= 80 GROUP BY job_success_rate;"
+    },
+    {
+        "question": "Какова средняя продолжительность проектов у фрилансеров в графическом дизайне?",
+        "sql": "SELECT AVG(job_duration_days) AS average_duration FROM freelancer_earnings WHERE job_category = 'Graphic Design';"
+    },
+    {
+        "question": "Какой средний доход получают фрилансеры, работающие на разных платформах?",
+        "sql": "SELECT platform, AVG(earnings_usd) AS average_income FROM freelancer_earnings GROUP BY platform;"
+    },
+    {
+        "question": "Как часто фрилансеры получают повторные заказы от одних и тех же клиентов?",
+        "sql": "SELECT rehire_rate, COUNT(*) AS number_of_freelancers FROM freelancer_earnings GROUP BY rehire_rate;"
+    },
+    {
+        "question": "Какой уровень успеха проектов у фрилансеров с различными методами оплаты?",
+        "sql": "SELECT payment_method, AVG(job_success_rate) AS average_success_rate FROM freelancer_earnings GROUP BY payment_method;"
+    },
+    {
+        "question": "Как влияет количество завершенных проектов на рейтинг фрилансера?",
+        "sql": "SELECT job_completed, AVG(client_rating) AS average_client_rating FROM freelancer_earnings GROUP BY job_completed;"
+    },
+    {
+        "question": "Какой тип проектов предпочитают фрилансеры для работы?",
+        "sql": "SELECT project_type, COUNT(*) AS count FROM freelancer_earnings GROUP BY project_type;"
+    },
+    {
+        "question": "Сколько времени в среднем фрилансеры тратят на завершение одного проекта?",
+        "sql": "SELECT AVG(job_duration_days) AS average_duration FROM freelancer_earnings;"
+    },
+    {
+        "question": "Каков средний доход фрилансеров в зависимости от уровня их квалификации?",
+        "sql": "SELECT experience_level, AVG(earnings_usd) AS average_income FROM freelancer_earnings GROUP BY experience_level;"
+    },
+    {
+        "question": "Как влияет опыт работы на почасовую ставку фрилансера?",
+        "sql": "SELECT experience_level, AVG(hourly_rate) AS average_hourly_rate FROM freelancer_earnings GROUP BY experience_level;"
+    },
+    {
+        "question": "Какой процент клиентов оставляет положительные отзывы о работе успешных фрилансеров?",
+        "sql": "SELECT job_success_rate, AVG(client_rating) AS average_client_rating FROM freelancer_earnings WHERE job_success_rate >= 80 GROUP BY job_success_rate;"
+    },
+    {
+        "question": "Какова средняя продолжительность проектов у фрилансеров в графическом дизайне?",
+        "sql": "SELECT AVG(job_duration_days) AS average_duration FROM freelancer_earnings WHERE job_category = 'Graphic Design';"
+    },
+    {
+        "question": "Какой средний доход получают фрилансеры, работающие на разных платформах?",
+        "sql": "SELECT platform, AVG(earnings_usd) AS average_income FROM freelancer_earnings GROUP BY platform;"
+    },
+    {
+        "question": "Как часто фрилансеры получают повторные заказы от одних и тех же клиентов?",
+        "sql": "SELECT rehire_rate, COUNT(*) AS number_of_freelancers FROM freelancer_earnings GROUP BY rehire_rate;"
+    },
+    {
+        "question": "Какой уровень успеха проектов у фрилансеров с различными методами оплаты?",
+        "sql": "SELECT payment_method, AVG(job_success_rate) AS average_success_rate FROM freelancer_earnings GROUP BY payment_method;"
+    },
+    {
+        "question": "Как влияет количество завершенных проектов на рейтинг фрилансера?",
+        "sql": "SELECT job_completed, AVG(client_rating) AS average_client_rating FROM freelancer_earnings GROUP BY job_completed;"
+    },
+    {
+        "question": "Как уровень опыта фрилансера влияет на его способность завершать проекты в срок?",
+        "sql": "SELECT experience_level, AVG(job_duration_days) AS average_duration FROM freelancer_earnings GROUP BY experience_level;"
+    },
+    {
+        "question": "Какие навыки наиболее востребованы среди фрилансеров с высоким доходом?",
+        "sql": "SELECT skills, COUNT(*) AS count FROM freelancer_earnings WHERE earnings_usd > (SELECT AVG(earnings_usd) FROM freelancer_earnings) GROUP BY skills;"
+    },
+    {
+        "question": "Какой тип проектов чаще всего выбирают фрилансеры, работающие на полную ставку?",
+        "sql": "SELECT project_type, COUNT(*) AS count FROM freelancer_earnings WHERE employment_type = 'Full-time' GROUP BY project_type;"
+    },
+    {
+        "question": "Как различия в доходах фрилансеров зависят от их уровня вовлеченности в профессиональное сообщество?",
+        "sql": "SELECT community_involvement_level, AVG(earnings_usd) AS average_income FROM freelancer_earnings GROUP BY community_involvement_level;"
+    },
+    {
+        "question": "Какой метод оплаты предпочитают фрилансеры, работающие с клиентами из разных стран?",
+        "sql": "SELECT payment_method, COUNT(*) AS count FROM freelancer_earnings WHERE client_country IS NOT NULL GROUP BY payment_method;"
+    },
+    {
+        "question": "Как уровень успешности фрилансера соотносится с количеством завершенных проектов за год?",
+        "sql": "SELECT job_completed_per_year, AVG(job_success_rate) AS average_success_rate FROM freelancer_earnings GROUP BY job_completed_per_year;"
+    },
+    {
+        "question": "Какие регионы предлагают лучшие возможности для фрилансеров в сфере графического дизайна?",
+        "sql": "SELECT region, AVG(earnings_usd) AS average_income FROM freelancer_earnings WHERE job_category = 'Graphic Design' GROUP BY region;"
+    },
+    {
+        "question": "Как опыт работы в команде влияет на шансы фрилансера получить высокооплачиваемые проекты?",
+        "sql": "SELECT team_experience_level, AVG(earnings_usd) AS average_income FROM freelancer_earnings GROUP BY team_experience_level;"
+    },
+    {
+        "question": "Какой тип работы чаще всего выполняется фрилансерами, имеющими высокий уровень клиентской удовлетворенности?",
+        "sql": "SELECT project_type, COUNT(*) AS count FROM freelancer_earnings WHERE client_rating >= 4.5 GROUP BY project_type;"
+    },
+    {
+        "question": "Как различия в доходах фрилансеров зависят от их маркетинговых стратегий и подходов к привлечению клиентов?",
+        "sql": "SELECT marketing_strategy, AVG(earnings_usd) AS average_income FROM freelancer_earnings GROUP BY marketing_strategy;"
     }
 ]

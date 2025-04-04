@@ -9,8 +9,8 @@ import os
 def generate_prompt(state: 'State'):
     prompt = (
         "Ответь на вопрос пользователя, используя только эти данные"
-        f'вопрос: {state['question']}\n'
-        f'данные: {state['result']}\n\n'
+        f'Вопрос: {state['question']}\n'
+        f'Данные: {state['result']}\n\n'
         "Округляй дробные значения"
         "Если вы не знаете ответа, просто скажите «я не знаю». Не пытайтесь что-то выдумать."
     )
@@ -20,20 +20,23 @@ def generate_prompt(state: 'State'):
 if __name__ == '__main__':
     vn = get_vanna()
     os.system('clear')
-
+    err = False
     while True:
         try:
+            if err:
+                print('Произошла ошибка, попробуйте изменить вопрос')
+                err = False
             user_input = input('Введите вопрос: ')
             if user_input == 'exit':
                 pprint('Bye!')
                 break
-
-            sql_res = vn.generate_sql(user_input, allow_llm_to_see_data=True)
             try:
+                sql_res = vn.generate_sql(user_input, allow_llm_to_see_data=True)
                 sql_fix = False
                 db_res = vn.run_sql(sql_res)
             except DatabaseError as e:
                 print('DB ERROR: ', e)
+                err = True
                 break
             state = State(
                 question=user_input,
