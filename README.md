@@ -2,7 +2,7 @@
 ## Сделан в архитектуре RAG Text2SQL Agent.
 ![alt text](image.png)
 ## Запуск
-- Нужно устновить ollama с офф. сайта: "https://ollama.com/download" и запустить `ollama run deepseek-r1`
+- Нужно устновить ollama с офф. сайта: "https://ollama.com/download" и запустить `ollama pull deepseek-r1 && ollama run deepseek-r1`
 - `make install` - установить Poetry зависимости
 - `make bot` - запустить бота в терминале
 - `make help` - инф. по командам
