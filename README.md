@@ -3,7 +3,7 @@
 ![alt text](image.png)
 ## Запуск
 - Нужно устновить ollama с офф. сайта: "https://ollama.com/download" и запустить `ollama serve && ollama pull deepseek-r1 && ollama run deepseek-r1`
-- `make install` - установить Poetry зависимости
+- `make po_install` - установить Poetry зависимости
 - `make bot` - запустить бота в терминале
 - `make help` - инф. по командам
 
